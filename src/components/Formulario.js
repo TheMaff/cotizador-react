@@ -93,7 +93,7 @@ const Formulario = ({ guardarResumen }) => {
     // Basíco aumenta 20%
     // Completo 50%
     const incrementoPlan = obtenerPlan(plan);
-    resultado = parseFloat(incrementoPlan * resultado).toFixed();
+    resultado = parseFloat(incrementoPlan * resultado).toFixed(2);
 
     // Total
     console.log(resultado);
