@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import styled from "@emotion/styled";
+import PropTypes from "prop-types";
+
 import { obtenerDiferenciaYear, calcularMarca, obtenerPlan } from "../Helper";
 
 const Campo = styled.div`
@@ -46,7 +48,7 @@ const Error = styled.div`
   text-align: center;
 `;
 
-const Formulario = ({ guardarResumen }) => {
+const Formulario = ({ guardarResumen, guardarCargando }) => {
   const [datos, guardarDatos] = useState({
     marca: "",
     year: "",
@@ -96,43 +98,49 @@ const Formulario = ({ guardarResumen }) => {
     resultado = parseFloat(incrementoPlan * resultado).toFixed(2);
 
     // Total
-    console.log(resultado);
-    guardarResumen({
-      cotizacion: resultado,
-      datos,
-    });
+    guardarCargando(true);
+    setTimeout(() => {
+      // Elimina el spinner
+      guardarCargando(false);
+      //   pasa info al component principal
+      guardarResumen({
+        cotizacion: Number(resultado),
+        datos,
+      });
+    }, 3000);
   };
 
   return (
     <form onSubmit={cotizarSeguro}>
-      {error ? <Error>Todos los campos son obligatorios</Error> : null}
+      {" "}
+      {error ? <Error> Todos los campos son obligatorios </Error> : null}{" "}
       <Campo>
-        <Label> Marca </Label>
+        <Label> Marca </Label>{" "}
         <Select name="marca" value={marca} onChange={obtenerInformacion}>
-          <option value=""> --Selecciones-- </option>
-          <option value="americano"> Americano </option>
-          <option value="europeo"> Asiatico </option>
-          <option value="asiatico"> Europeo </option>
-        </Select>
-      </Campo>
+          <option value=""> --Selecciones-- </option>{" "}
+          <option value="americano"> Americano </option>{" "}
+          <option value="europeo"> Asiatico </option>{" "}
+          <option value="asiatico"> Europeo </option>{" "}
+        </Select>{" "}
+      </Campo>{" "}
       <Campo>
-        <Label> Año </Label>
+        <Label> Año </Label>{" "}
         <Select name="year" value={year} onChange={obtenerInformacion}>
-          <option value="">-- Seleccione --</option>
-          <option value="2021">2021</option>
-          <option value="2020">2020</option>
-          <option value="2019">2019</option>
-          <option value="2018">2018</option>
-          <option value="2017">2017</option>
-          <option value="2016">2016</option>
-          <option value="2015">2015</option>
-          <option value="2014">2014</option>
-          <option value="2013">2013</option>
-          <option value="2012">2012</option>
-        </Select>
-      </Campo>
+          <option value=""> --Seleccione-- </option>{" "}
+          <option value="2021"> 2021 </option>{" "}
+          <option value="2020"> 2020 </option>{" "}
+          <option value="2019"> 2019 </option>{" "}
+          <option value="2018"> 2018 </option>{" "}
+          <option value="2017"> 2017 </option>{" "}
+          <option value="2016"> 2016 </option>{" "}
+          <option value="2015"> 2015 </option>{" "}
+          <option value="2014"> 2014 </option>{" "}
+          <option value="2013"> 2013 </option>{" "}
+          <option value="2012"> 2012 </option>{" "}
+        </Select>{" "}
+      </Campo>{" "}
       <Campo>
-        <Label> Plan </Label>
+        <Label> Plan </Label>{" "}
         <InputRadio
           type="radio"
           name="plan"
@@ -140,7 +148,7 @@ const Formulario = ({ guardarResumen }) => {
           checked={plan === "basico"}
           onChange={obtenerInformacion}
         />
-        Basico
+        Basico{" "}
         <InputRadio
           type="radio"
           name="plan"
@@ -148,11 +156,16 @@ const Formulario = ({ guardarResumen }) => {
           checked={plan === "completo"}
           onChange={obtenerInformacion}
         />
-        Completo
-      </Campo>
-      <Boton type="submit">Cotizar</Boton>
+        Completo{" "}
+      </Campo>{" "}
+      <Boton type="submit"> Cotizar </Boton>{" "}
     </form>
   );
+};
+
+Formulario.propTypes = {
+  guardarResumen: PropTypes.func.isRequired,
+  guardarCargando: PropTypes.func.isRequired,
 };
 
 export default Formulario;
